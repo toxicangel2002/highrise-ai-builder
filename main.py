@@ -1,7 +1,7 @@
 # main.py
 import os
 from dotenv import load_dotenv
-from highrise import BaseBot, __main__ as hr
+from highrise import BaseBot
 from theme_router import detect_theme
 from builder import load_layout, build_room
 
@@ -41,4 +41,8 @@ class BuilderBot(BaseBot):
 # Start the bot
 if __name__ == "__main__":
     bot = BuilderBot()
-    hr.main(bot, EMAIL, PASSWORD, ROOM_ID)
+    bot.run(
+        email=EMAIL,
+        password=PASSWORD,
+        room_id=ROOM_ID
+    )
