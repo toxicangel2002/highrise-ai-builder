@@ -1,30 +1,44 @@
+# main.py
+import os
+from dotenv import load_dotenv
+from highrise import BaseBot, __main__ as hr
 from theme_router import detect_theme
 from builder import load_layout, build_room
 
+# Load environment variables
+load_dotenv()
+EMAIL = os.getenv("HR_EMAIL")
+PASSWORD = os.getenv("HR_PASSWORD")
+ROOM_ID = os.getenv("ROOM_ID")
 
-def handle_command(command):
+# Railway-safe check
+if not EMAIL or not PASSWORD or not ROOM_ID:
+    print("ERROR: Missing environment variables. Please set HR_EMAIL, HR_PASSWORD, and ROOM_ID.")
+    exit(1)
 
-    if command.startswith("/make"):
+# Define the bot class
+class BuilderBot(BaseBot):
+    async def on_start(self, session_metadata):
+        print("Bot connected to Highrise!")
+        await self.highrise.chat("Builder bot online 🤖")
 
-        theme = detect_theme(command)
+    async def on_chat(self, user, message):
+        # Listen for /make commands
+        if message.startswith("/make"):
+            theme = detect_theme(message)
+            layout = load_layout(theme)
 
-        print(f"Theme detected: {theme}")
+            await self.highrise.chat(f"Building a {theme} room!")
 
-        layout = load_layout(theme)
+            for item in layout["items"]:
+                tag = item["tag"]
+                x = item["x"]
+                y = item["y"]
 
-        build_room(layout)
+                # Currently just printing positions; you can add actual placement later
+                print(f"Placing {tag} at position ({x}, {y})")
 
-
-def start_bot():
-
-    print("Highrise AI Builder Bot Started")
-
-    while True:
-
-        command = input("Enter command: ")
-
-        handle_command(command)
-
-
+# Start the bot
 if __name__ == "__main__":
-    start_bot()
+    bot = BuilderBot()
+    hr.main(bot, EMAIL, PASSWORD, ROOM_ID)
