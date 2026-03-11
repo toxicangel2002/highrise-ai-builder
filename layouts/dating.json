@@ -1,0 +1,25 @@
+{
+ "name": "dating_room",
+ "items": [
+  {
+   "tag": "sofa",
+   "x": 4,
+   "y": 3
+  },
+  {
+   "tag": "table",
+   "x": 4,
+   "y": 4
+  },
+  {
+   "tag": "lamp",
+   "x": 3,
+   "y": 3
+  },
+  {
+   "tag": "plant",
+   "x": 6,
+   "y": 3
+  }
+ ]
+}
